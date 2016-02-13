@@ -2,9 +2,6 @@
 package org.usfirst.frc.team20.robot;
 
 import java.util.Comparator;
-import java.util.Vector;
-
-import org.usfirst.frc.team20.robot.Robot.ParticleReport;
 import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.*;
 import com.ni.vision.NIVision.DrawMode;
@@ -14,9 +11,6 @@ import com.ni.vision.NIVision.ShapeMode;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,8 +20,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	
-	
 	//A structure to hold measurements of a particle
 			public class ParticleReport implements Comparator<ParticleReport>, Comparable<ParticleReport>{
 				double PercentAreaToImageArea;
@@ -141,13 +133,13 @@ public class Robot extends IterativeRobot {
 		criteria[0].upper = areaMax;
 		imaqError = NIVision.imaqParticleFilter4(particleBinaryFrame, binaryFrame, criteria,
 				filterOptions,null);
-
+		
 		
 	    int numParticles = NIVision.imaqCountParticles(particleBinaryFrame, 1);
-		double middleHorizonal=0.0000;
-		double middleHVertical=0.0000;
+//		double middleHorizonal=0.0000;
+//		double middleHVertical=0.0000;
 		
-		System.out.println("Filtered particles" + numParticles);
+//		System.out.println("Filtered particles" + numParticles);
 		
 		double verticalImage = 180;
         double horizontalImage = 240;
@@ -159,19 +151,18 @@ public class Robot extends IterativeRobot {
         Point endV = new NIVision.Point((int)(horizontalImage), (int)(verticalImage + 10));
         NIVision.imaqDrawLineOnImage(binaryFrame, binaryFrame, DrawMode.DRAW_VALUE, startV, endV,
         		200f);
-		if(numParticles > 0)
-		{
+		if(numParticles > 0){
 			System.out.println("Test num of particles " + numParticles);
 			
 			//Measure particles and sort by particle size
-			Vector<ParticleReport> particles = new Vector<ParticleReport>();
+//			Vector<ParticleReport> particles = new Vector<ParticleReport>();
 			
 			for(int particleIndex = 0; particleIndex < numParticles; particleIndex++)
 			{
 				
 				ParticleReport par = new ParticleReport();
-				par.PercentAreaToImageArea = NIVision.imaqMeasureParticle(particleBinaryFrame, particleIndex,
-						0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
+//				par.PercentAreaToImageArea = NIVision.imaqMeasureParticle(particleBinaryFrame, particleIndex,
+//						0, NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA);
 				par.Area = NIVision.imaqMeasureParticle(particleBinaryFrame, particleIndex, 0,
 						NIVision.MeasurementType.MT_AREA);
 				par.BoundingRectTop = NIVision.imaqMeasureParticle(particleBinaryFrame, particleIndex,
@@ -183,9 +174,9 @@ public class Robot extends IterativeRobot {
 						NIVision.MeasurementType.MT_BOUNDING_RECT_BOTTOM);
 				par.BoundingRectRight = NIVision.imaqMeasureParticle(particleBinaryFrame, particleIndex, 0,
 						NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
-				middleHorizonal = (par.BoundingRectLeft - par.BoundingRectRight) / 2.0000;
-				middleHVertical = (par.BoundingRectTop - par.BoundingRectBottom) / 2.0000;
-//				System.out.println("Middle horizontial =" + middleHorizonal);
+//				middleHorizonal = (par.BoundingRectLeft - par.BoundingRectRight) / 2.0000;
+//				middleHVertical = (par.BoundingRectTop - par.BoundingRectBottom) / 2.0000;
+//				System.out.println("Middle horizontal =" + middleHorizonal);
 //				System.out.println("Middle vertical =" + middleHVertical);
 				Rect r = new NIVision.Rect((int)par.BoundingRectTop ,(int) par.BoundingRectLeft, 
 						Math.abs((int)(par.BoundingRectTop - par.BoundingRectBottom)),
@@ -250,7 +241,15 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during test mode
 	 */
 	public void testPeriodic() {
-
+		VisionTargeting vision = new VisionTargeting();
+		vision.getImage();
+		vision.drawImageCenterCrosshair();
+		vision.drawRectangle();
+		vision.drawRecCenterCrosshair();
+		vision.findRecCenterX();
+		vision.findRecCenterY();
+		vision.findImageCenterX();
+		vision.findImageCenterY();
 	}
 
 }
