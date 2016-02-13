@@ -51,16 +51,8 @@ public class Robot extends IterativeRobot {
 	
 	//78 100
 	
-	NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(0, 130); // Default
-																	// hue range
-																	// for
-																	// yellow
-																	// tote
-	NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(149, 255); // Default
-																	// saturation
-																	// range for
-																	// yellow
-																	// tote
+	NIVision.Range TARGET_HUE_RANGE = new NIVision.Range(0, 130); 
+	NIVision.Range TARGET_SAT_RANGE = new NIVision.Range(149, 255); 
 //	NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(142, 255); // Default
 																	// value
 	NIVision.Range TARGET_VAL_RANGE = new NIVision.Range(142, 200); // Default
@@ -68,12 +60,11 @@ public class Robot extends IterativeRobot {
 	
 	
 	
-	double AREA_MINIMUM = 0.5; //Default Area minimum for particle as a percentage of total image area
-	double LONG_RATIO = 2.22; //Tote long side = 26.9 / Tote height = 12.1 = 2.22
-	double SHORT_RATIO = 1.4; //Tote short side = 16.9 / Tote height = 12.1 = 1.4
-	double SCORE_MIN = 75.0;  //Minimum score to be considered a tote
-	double VIEW_ANGLE = 49.4; //View angle fo camera, set to Axis m1011 by default, 64 for m1013, 51.7 for 206,
-								//52 for HD3000 square, 60 for HD3000 640x480
+	double AREA_MINIMUM = 0.5; 
+	double LONG_RATIO = 2.22; 
+	double SHORT_RATIO = 1.4;
+	double SCORE_MIN = 75.0;
+	double VIEW_ANGLE = 49.4; 
 	NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
 	NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0,0,1,1);
 	
@@ -216,31 +207,25 @@ public class Robot extends IterativeRobot {
 		        NIVision.imaqDrawLineOnImage(binaryFrame, binaryFrame, DrawMode.DRAW_VALUE,
 		        		startHrec, endHrec,
 		        		150f);
-		        Point startVrec = new NIVision.Point((int)(centerRec[0] + horizontalImage + 10),
+		        Point startVrec = new NIVision.Point((int)(centerRec[0] + horizontalImage - 10),
 		        		(int)(-centerRec[1] + verticalImage - 10));
-		        Point endVrec = new NIVision.Point((int)(centerRec[0] + horizontalImage - 10),
+		        Point endVrec = new NIVision.Point((int)(centerRec[0] + horizontalImage + 10),
 		        		(int)(-centerRec[1] + verticalImage + 10));
 		        NIVision.imaqDrawLineOnImage(binaryFrame, binaryFrame, DrawMode.DRAW_VALUE, startVrec,
 		        		endVrec, 150f);
 		        Point center = new NIVision.Point((int)(horizontalImage), (int)(verticalImage));
 		        Point recCenter = new NIVision.Point((int)(centerRec[0]), (int)(centerRec[1]));
-
-//		        System.out.println("Image Center: " + center);
-//		        System.out.println("Rectangle Center: " + recCenter);
+		        System.out.println("Center: " + center.x + " , " + center.y);
+		        System.out.println("Rectangle Center: " + recCenter.x + " , " + recCenter.y);
 		        //FOV calculations
 		        double Tft = 1.625;
 		        double horizontalPixel = horizontalImage*2;
 		        double Tpixel = Math.abs(par.BoundingRectLeft - par.BoundingRectRight);
 		        double FOVpixel = (horizontalPixel*Tft)/(2*Tpixel);
-		        double distance = FOVpixel/Math.tan((49*(Math.PI/180))/2);
+		        double distance = FOVpixel/Math.tan((44.5*(Math.PI/180))/2);
 		        System.out.println("Distance: " + distance);
 
-		        //Finding distance based on image
-//		        double distance;
-//		        double angle = Math.tan(49/2);
-//		        distance = Tft*FOVpixel/(2*Tpixel*angle);
-//		        System.out.println("Distance: " + distance);
-		        
+		       
 		   //     NIVision.imaqDrawShapeOnImage(binaryFrame, binaryFrame, r, DrawMode.DRAW_VALUE, ShapeMode.SHAPE_OVAL, 125f);
 		        
 		       // Math.abs((int)(par.BoundingRectRight - par.BoundingRectLeft))
