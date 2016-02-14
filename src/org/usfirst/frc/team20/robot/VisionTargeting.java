@@ -59,11 +59,12 @@ public class VisionTargeting {
 	double boundingBottom;
 	double Tft;
 	double horizontalPixel;
-	
-	
+	double angle;
+	double crosshair;
+		
 	public VisionTargeting(){
 		System.out.println("Starting Init");
-		AREA_MINIMUM = 0.25;
+		AREA_MINIMUM = 0.15;
 		LONG_RATIO = 2.22;
 		SHORT_RATIO = 1.4;
 		SCORE_MIN = 75.0;
@@ -130,6 +131,7 @@ public class VisionTargeting {
 			boundingLeft = par.BoundingRectLeft;
 			boundingTop = par.BoundingRectTop;
 			boundingBottom = par.BoundingRectBottom;
+			crosshair = par.BoundingRectTop;
 		}
 	}
 	private void drawCenterCrosshairs(){
@@ -142,14 +144,14 @@ public class VisionTargeting {
 	}
 	private void drawCenterRecCrosshairs(){
 		Point startHrec = new NIVision.Point((int) (centerRec[0] + horizontalImage - 10),
-				(int) (-centerRec[1] + verticalImage + 10));
+				(int) (crosshair + 10));
 		Point endHrec = new NIVision.Point((int) (centerRec[0] + horizontalImage + 10),
-				(int) (-centerRec[1] + verticalImage - 10));
+				(int) (crosshair - 10));
 		NIVision.imaqDrawLineOnImage(binaryFrame, binaryFrame, DrawMode.DRAW_VALUE, startHrec, endHrec, 150f);
 		Point startVrec = new NIVision.Point((int) (centerRec[0] + horizontalImage - 10),
-				(int) (-centerRec[1] + verticalImage - 10));
+				(int) (crosshair - 10));
 		Point endVrec = new NIVision.Point((int)(centerRec[0] + horizontalImage + 10),
-				(int) (-centerRec[1] + verticalImage + 10));
+				(int) (crosshair + 10));
 		NIVision.imaqDrawLineOnImage(binaryFrame, binaryFrame, DrawMode.DRAW_VALUE, startVrec, endVrec, 150f);
 	}
 	public void processImage(){
@@ -192,7 +194,7 @@ public class VisionTargeting {
 		double Tpixels = boundingBottom;
 		double pixel = Math.abs(centerXCoordinate() - recCenterXCoordinate());
 		double feet = (Tft*pixel)/Tpixels;
-		double angle = Math.atan(feet/distance)*(180/Math.PI);
+		angle = Math.atan(feet/distance)*(180/Math.PI);
 		System.out.println("Angle: " + angle);
 		return angle;
 	}

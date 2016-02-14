@@ -21,15 +21,15 @@ public class Autonomous {
 			gotYaw = true;
 		}
 		if (navx.getYaw() > origYaw + angle + tolerance && navx.getYaw() < origYaw + 180) {
-			drive.drive(0, -1); 			//TODO negate proper side (right)
+			drive.drive(0, 1); 			//TODO negate proper side (right)
 			drive.drive(1, 1);
-			drive.drive(2, -1);
+			drive.drive(2, 1);
 			drive.drive(3, 1);
 		}
 		if (navx.getYaw() < origYaw + angle + tolerance && navx.getYaw() > origYaw - 180) {
-			drive.drive(0, 1); 		//TODO negate proper side (left)
+			drive.drive(0, -1); 		//TODO negate proper side (left)
 			drive.drive(1, -1);
-			drive.drive(2, 1);
+			drive.drive(2, -1);
 			drive.drive(3, -1);
 		}
 	}
