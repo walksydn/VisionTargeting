@@ -55,6 +55,10 @@ public class VisionTargeting {
 	centerRec[1] = (topRec + bottomRec) / 2;}
 	double boundingRight;
 	double boundingLeft;
+	double boundingTop;
+	double boundingBottom;
+	double Tft;
+	double horizontalPixel;
 	
 	
 	public VisionTargeting(){
@@ -124,6 +128,8 @@ public class VisionTargeting {
 			centerRec[1] = (topRec + bottomRec) / 2;
 			boundingRight = par.BoundingRectRight;
 			boundingLeft = par.BoundingRectLeft;
+			boundingTop = par.BoundingRectTop;
+			boundingBottom = par.BoundingRectBottom;
 		}
 	}
 	private void drawCenterCrosshairs(){
@@ -142,7 +148,7 @@ public class VisionTargeting {
 		NIVision.imaqDrawLineOnImage(binaryFrame, binaryFrame, DrawMode.DRAW_VALUE, startHrec, endHrec, 150f);
 		Point startVrec = new NIVision.Point((int) (centerRec[0] + horizontalImage - 10),
 				(int) (-centerRec[1] + verticalImage - 10));
-		Point endVrec = new NIVision.Point((int) (centerRec[0] + horizontalImage + 10),
+		Point endVrec = new NIVision.Point((int)(centerRec[0] + horizontalImage + 10),
 				(int) (-centerRec[1] + verticalImage + 10));
 		NIVision.imaqDrawLineOnImage(binaryFrame, binaryFrame, DrawMode.DRAW_VALUE, startVrec, endVrec, 150f);
 	}
@@ -154,29 +160,41 @@ public class VisionTargeting {
 		CameraServer.getInstance().setImage(binaryFrame);
 	}
 	public double getDistance(){
-		double Tft = 1.625;
-		double horizontalPixel = horizontalImage * 2;
+		Tft = 1.625;
+		horizontalPixel = horizontalImage * 2;
 		double Tpixel = Math.abs(boundingLeft - boundingRight);
 		double FOVpixel = (horizontalPixel * Tft) / (2 * Tpixel);
-		double distance = FOVpixel / Math.tan((44.5 * (Math.PI / 180)) / 2);
+		distance = FOVpixel / Math.tan((44.5 * (Math.PI / 180)) / 2);
 		System.out.println("Distance: " + distance);
 		return distance;
 	}
 	public double centerXCoordinate(){
 		Point center = new NIVision.Point((int)(horizontalImage), (int)(verticalImage));
+		System.out.println("Center X: " + center.x);
 		return center.x;
 	}
 	public double centerYCoordinate(){
 		Point center = new NIVision.Point((int)(horizontalImage), (int)(verticalImage));
+		System.out.println("Center Y: " + center.y);
 		return center.y;
 	}
 	public double recCenterXCoordinate(){
 		Point recCenter = new NIVision.Point((int) (centerRec[0]), (int) (centerRec[1]));
+		System.out.println("Rec Center X: " + recCenter.x);
 		return recCenter.x;
 	}
 	public double recCenterYCoordinate(){
 		Point recCenter = new NIVision.Point((int) (centerRec[0]), (int) (centerRec[1]));
+		System.out.println("Rec Center Y: " + recCenter.y);
 		return recCenter.y;
+	}
+	public double getAngle(){
+		double Tpixels = boundingBottom;
+		double pixel = Math.abs(centerXCoordinate() - recCenterXCoordinate());
+		double feet = (Tft*pixel)/Tpixels;
+		double angle = Math.atan(feet/distance)*(180/Math.PI);
+		System.out.println("Angle: " + angle);
+		return angle;
 	}
 }	
 	

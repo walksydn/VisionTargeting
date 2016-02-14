@@ -1,9 +1,6 @@
 
 package org.usfirst.frc.team20.robot;
 
-import java.util.Comparator;
-import com.ni.vision.NIVision;
-import com.ni.vision.NIVision.*;
 import com.ni.vision.NIVision.DrawMode;
 import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.ImageType;
@@ -68,6 +65,7 @@ public class Robot extends IterativeRobot {
 //	 */
 //
 	VisionTargeting camera;
+	Autonomous auto;
 	public void robotInit() {
 //		frame = NIVision.imaqCreateImage(ImageType.IMAGE_RGB, 0);
 //		binaryFrame = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 0);
@@ -80,9 +78,8 @@ public class Robot extends IterativeRobot {
 //
 //		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, AREA_MINIMUM,
 //				100.0, 0, 0);
-		System.out.println("Before VT");
 		camera = new VisionTargeting();
-		System.out.println("After VT");
+		auto = new Autonomous();
 	}
 
 	/**
@@ -104,7 +101,14 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during autonomous
 	 */
 	public void autonomousPeriodic() {
-
+		camera.processImage();
+		if(camera.centerXCoordinate() < camera.recCenterXCoordinate()){
+			auto.turnToAngle(5, 1);
+		}if(camera.centerXCoordinate() > camera.recCenterXCoordinate()){
+			auto.turnToAngle(355, 1);
+		}else{
+			auto.stop();
+		}
 	}
 
 	/**
@@ -114,6 +118,11 @@ public class Robot extends IterativeRobot {
 		System.out.println("Teleop");
 		camera.processImage();
 		camera.getDistance();
+		camera.centerXCoordinate();
+		camera.centerYCoordinate();
+		camera.recCenterXCoordinate();
+		camera.recCenterYCoordinate();
+		camera.getAngle();
 		Timer.delay(.0005);
 	}
 
