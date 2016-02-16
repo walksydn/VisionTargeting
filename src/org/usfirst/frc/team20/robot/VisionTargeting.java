@@ -88,7 +88,6 @@ public class VisionTargeting {
 		TARGET_SAT_RANGE = new NIVision.Range(149, 255);
 		TARGET_VAL_RANGE = new NIVision.Range(142, 200);
 		filteredImage = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 0);
-		System.out.println("Done");
 	}
 	private void getImage(){
 		NIVision.IMAQdxGrab(session, frame, 1);
@@ -100,21 +99,17 @@ public class VisionTargeting {
 	}
 	private void drawRectangle(){
 		for (int particleIndex = 0; particleIndex < numParticles; particleIndex++) {
-			System.out.println("We've got particles!");
 			ParticleReport par = new ParticleReport();
 			par.Area = NIVision.imaqMeasureParticle(particleBinaryFrame, particleIndex, 0,
 					NIVision.MeasurementType.MT_AREA);
 			par.BoundingRectTop = NIVision.imaqMeasureParticle(particleBinaryFrame, particleIndex, 0,
 					NIVision.MeasurementType.MT_BOUNDING_RECT_TOP);
-			System.out.println("Top: " + par.BoundingRectTop);
 			par.BoundingRectLeft = NIVision.imaqMeasureParticle(particleBinaryFrame, particleIndex, 0,
 					NIVision.MeasurementType.MT_BOUNDING_RECT_LEFT);
-			System.out.println("Left: " + par.BoundingRectLeft);
 			par.BoundingRectBottom = NIVision.imaqMeasureParticle(particleBinaryFrame, particleIndex, 0,
 					NIVision.MeasurementType.MT_BOUNDING_RECT_BOTTOM);
 			par.BoundingRectRight = NIVision.imaqMeasureParticle(particleBinaryFrame, particleIndex, 0,
 					NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
-			System.out.println("Par Works: " + par.BoundingRectRight);
 			Rect r = new NIVision.Rect((int) par.BoundingRectTop, (int) par.BoundingRectLeft,
 					Math.abs((int) (par.BoundingRectTop - par.BoundingRectBottom)),
 					Math.abs((int) (par.BoundingRectLeft - par.BoundingRectRight)));
@@ -172,31 +167,26 @@ public class VisionTargeting {
 	}
 	public double centerXCoordinate(){
 		Point center = new NIVision.Point((int)(horizontalImage), (int)(verticalImage));
-		System.out.println("Center X: " + center.x);
 		return center.x;
 	}
 	public double centerYCoordinate(){
 		Point center = new NIVision.Point((int)(horizontalImage), (int)(verticalImage));
-		System.out.println("Center Y: " + center.y);
 		return center.y;
 	}
 	public double recCenterXCoordinate(){
 		Point recCenter = new NIVision.Point((int) (centerRec[0]), (int) (centerRec[1]));
-		System.out.println("Rec Center X: " + recCenter.x);
 		return recCenter.x;
 	}
 	public double recCenterYCoordinate(){
 		Point recCenter = new NIVision.Point((int) (centerRec[0]), (int) (centerRec[1]));
-		System.out.println("Rec Center Y: " + recCenter.y);
 		return recCenter.y;
 	}
 	public double getAngle(){
-		double Tpixels = boundingBottom;
-		double pixel = Math.abs(centerXCoordinate() - recCenterXCoordinate());
+		double Tpixels = bottomRec;
+		double pixel = Math.abs(0 - recCenterXCoordinate());
 		double feet = (Tft*pixel)/Tpixels;
-		angle = Math.atan(feet/distance)*(180/Math.PI);
+		angle = Math.atan(feet/getDistance())*(180/Math.PI);
 		System.out.println("Angle: " + angle);
 		return angle;
 	}
-}	
-	
+}

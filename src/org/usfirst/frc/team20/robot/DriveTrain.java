@@ -14,21 +14,21 @@ public class DriveTrain {
 	public void drive(int m, double s){			//m = motor number (i)
 		motors[m].set(s);						//s = speed of motor
 	}
-	public void arcadeDrive(double s, double r, double l){
+	public void arcadeDrive(double speed, double right, double left){
 		for(int i=0; i<motors.length; i++){
 			if(i%2==0){
-				motors[i].set(-(s-r+l));
+				motors[i].set(-(speed-right+left));
 			}else{
-				motors[i].set(s-l+r);
+				motors[i].set(speed-left+right);
 			}	
 		}		
 	}
-	public void tankDrive(double l, double r){
+	public void tankDrive(double left, double right){
 		for(int i=0; i<motors.length; i++){
 			if(i%2==0){
-				motors[i].set(-l);
+				motors[i].set(-left);
 			}else{
-				motors[i].set(r);
+				motors[i].set(right);
 			}
 		}
 	}

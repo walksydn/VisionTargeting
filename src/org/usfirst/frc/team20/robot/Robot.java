@@ -2,6 +2,7 @@
 package org.usfirst.frc.team20.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 
 /**
@@ -61,6 +62,8 @@ public class Robot extends IterativeRobot {
 //
 	VisionTargeting camera;
 	Autonomous auto;
+	DriveTrain drive;
+	Joystick joy;
 	public void robotInit() {
 //		frame = NIVision.imaqCreateImage(ImageType.IMAGE_RGB, 0);
 //		binaryFrame = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 0);
@@ -75,6 +78,12 @@ public class Robot extends IterativeRobot {
 //				100.0, 0, 0);
 		camera = new VisionTargeting();
 		auto = new Autonomous();
+		drive = new DriveTrain(4);
+		joy = new Joystick(0);
+		drive.assignPort(0, 10);
+		drive.assignPort(1, 9);
+		drive.assignPort(2, 1);
+		drive.assignPort(3, 2);
 	}
 
 	/**
@@ -97,13 +106,19 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousPeriodic() {
 		camera.processImage();
-		if(camera.centerXCoordinate() < camera.recCenterXCoordinate()){
-			auto.turnToAngle(5, 1);
-		}if(camera.centerXCoordinate() > camera.recCenterXCoordinate()){
-			auto.turnToAngle(355, 1);
-		}else{
+		if(camera.recCenterXCoordinate() + 5 > 0){
+			auto.turnToYaw(camera.getAngle(), 3, .3);
+			camera.processImage();
+		}if(camera.recCenterXCoordinate() - 5 < 0){
+			auto.turnToYaw(-camera.getAngle(), 3, .3);
+			camera.processImage();
+		}else if(camera.recCenterXCoordinate() + 5 < 0 &&
+				camera.recCenterXCoordinate() - 5 > 0){
 			auto.stop();
+			auto.gotYaw = false;
+			camera.processImage();
 		}
+		System.out.println("Rec Center X: " + camera.recCenterXCoordinate());
 	}
 
 	/**
@@ -119,6 +134,7 @@ public class Robot extends IterativeRobot {
 		camera.recCenterYCoordinate();
 		camera.getAngle();
 		Timer.delay(.0005);
+		drive.tankDrive(joy.getRawAxis(1), joy.getRawAxis(5));
 	}
 
 //	public void origionalCode() {
