@@ -10,7 +10,7 @@ import com.ni.vision.NIVision.Rect;
 import com.ni.vision.NIVision.ShapeMode;
 import edu.wpi.first.wpilibj.CameraServer;
 
-public class VisionTargeting {
+public class VisionTargeting2 {
 	public class ParticleReport implements Comparator<ParticleReport>, Comparable<ParticleReport> {
 		double PercentAreaToImageArea;
 		double Area;
@@ -97,7 +97,7 @@ public class VisionTargeting {
 	}
 	
 		
-	public VisionTargeting(){
+	public VisionTargeting2(){
 		System.out.println("Starting Init");
 		AREA_MINIMUM = 0.15;
 		LONG_RATIO = 2.22;

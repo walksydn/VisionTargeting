@@ -60,7 +60,7 @@ public class Robot extends IterativeRobot {
 //	 * used for any initiaRGETlization code.
 //	 */
 //
-	VisionTargeting camera;
+	VisionTargeting2 camera;
 	Autonomous auto;
 	DriveTrain drive;
 	Joystick joy;
@@ -76,7 +76,7 @@ public class Robot extends IterativeRobot {
 //
 //		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, AREA_MINIMUM,
 //				100.0, 0, 0);
-		camera = new VisionTargeting();
+		camera = new VisionTargeting2();
 		auto = new Autonomous();
 		drive = new DriveTrain(4);
 		joy = new Joystick(0);
